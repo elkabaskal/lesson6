@@ -1,7 +1,7 @@
 "use strict"
 
-var i = 0;
-const card = {
+
+const catalog = {
     goods: [{
         id: 1,
         typeofgoods: 'for_man',
@@ -25,55 +25,73 @@ const card = {
     }, ],
 
 
-    /*     filCard() {
-            let sum = 0;
-            let amountAll = 0;
-            for (i; i < card.goods.length; i++) {
-                var amount = +prompt('Введите необходимое количество товара ' + card.goods[i].typeofgoods);
-                if (isNaN(amount)) {
-                    alert('Введено неверное значение');
-                    //this.filCard()
-                }
-                card.goods[i].quantity = amount;
-                let result = amount * card.goods[i].price;
-                sum += result;
-                amountAll += amount;
-                if (amount !== 0) {
-                    this.initCardOfGoods();
-                }
 
-            }
-            if (sum == 0) {
-                document.write('Корзина пуста');
-            } else {
-                document.write('В корзине ' + amountAll + ' товаров на сумму ' + sum + ' руб.');
-            }
+    initCatalog() {
 
-        }, */
+        const catalogItem = document.getElementById('products');
+        var id = 0;
+        var total = 0;
+        for (var i = 0; i < catalog.goods.length; i++) {
+            const goods = document.createElement('div');
+            catalogItem.appendChild(goods);
+            goods.className = 'good';
+            goods.insertAdjacentHTML("beforeend", '<p class ="cart__text">Тип товара: ' + catalog.goods[i].typeofgoods + '</p>');
+            goods.insertAdjacentHTML("beforeend", '<p class ="cart__text">Цена товара: ' + catalog.goods[i].price + '</p>');
+            goods.insertAdjacentHTML("beforeend", '<button class = "btn" data-id  = ' + id + '>Добавить в корзину</button>');
+            id++;
+        };
+        this.addToCart();
+    },
+    addToCart() {
+        document.querySelector('#products').addEventListener('click', (Event) => {
+            if (Event.target.tagName !== 'BUTTON') return;
+            this.pushToCart(Event.target.dataset.id);
+        });
+    },
+    pushToCart(id) {
+        var number = +id;
+        cart.list.push(this.goods[number]);
+        total = +catalog.goods[number].price;
+        cart.amountTotal(total);
 
-    initCardOfGoods() {
+    },
+};
 
-        const basketBlock = document.getElementById('basket');
-        basketBlock.insertAdjacentHTML("afterbegin", '<button class = "clear">Очистить корзину</button>');
+var total = 0;
+var sum = 0;
+const cart = {
 
-        for (i; i < card.goods.length; i++) {
-            const cardGoods = document.createElement('div');
-            basketBlock.appendChild(cardGoods);
-            cardGoods.className = 'good';
-            cardGoods.insertAdjacentHTML("beforeend", '<p class ="cart__text">Тип товара: ' + card.goods[i].typeofgoods + '</p>');
-            cardGoods.insertAdjacentHTML("beforeend", '<p class ="cart__text">Количество выбраного товара в корзине: ' + card.goods[i].quantity + '</p>');
-            cardGoods.insertAdjacentHTML("beforeend", '<p class ="cart__text">Цена товара: ' + card.goods[i].price + '</p>');
-            cardGoods.insertAdjacentHTML("beforeend", '<p class ="cart__text">Стоимость выбранного товара: ' + card.goods[i].price * card.goods[i].quantity + '</p>');
-            cardGoods.insertAdjacentHTML("beforeend", '<button class = "btn">Добавить в корзину</button>');
-        }
-        basketBlock.insertAdjacentHTML("beforeend", '<p class = "cart__empty">Корзина пуста</p>');
+    list: [],
 
-        /*  let sum = 0;
-         if (sum == 0) {
-             document.write('Корзина пуста'); 
-         }*/
+    amountTotal(total) {
+        sum = sum + total;
+        this.initBasket();
     },
 
-}
+    initBasket() {
+        const emptiCart = document.querySelector('.cart__empty');
+        if (this.list.length == 0) {
+            emptiCart.textContent = 'Корзина пуста';
+        } else {
+            emptiCart.textContent = 'Товар добавлен в корзину';
+        };
 
-card.initCardOfGoods()
+        const quantityCartGoods = document.querySelector('.cart__list');
+        quantityCartGoods.textContent = 'Количество выбраного товара в корзине: ' + cart.list.length;
+        const summaryCartGoods = document.querySelector('.cart__list--sum');
+        summaryCartGoods.textContent = 'Стоимость выбранного товара: ' + sum;
+        this.clear();
+    },
+
+    clear() {
+        document.querySelector('.clear').addEventListener('click', (Event) => this.reset())
+    },
+
+    reset() {
+        sum = 0;
+        this.list = [];
+        this.initBasket();
+    },
+};
+cart.reset();
+catalog.initCatalog();

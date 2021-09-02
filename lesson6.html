@@ -14,7 +14,7 @@
         .good {
             border: 3px solid #000;
             background-color: aqua;
-            width: 30%;
+            width: 20%;
         }
         
         .btn,
@@ -29,7 +29,14 @@
         }
     </style>
 
-    <div id='basket'></div>
+    <div id='products'></div>
+    <div id='basket'>
+        <h1 class="heading">Корзина</h1>
+        <p class="cart__empty"></p>
+        <p class="cart__list"></p>
+        <p class="cart__list--sum"></p>
+        <button class="clear">Очистить корзину</button>
+    </div>
 
     <script src="script.js"></script>
 </body>
