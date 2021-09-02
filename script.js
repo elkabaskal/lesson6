@@ -53,7 +53,6 @@ const catalog = {
         cart.list.push(this.goods[number]);
         total = +catalog.goods[number].price;
         cart.amountTotal(total);
-
     },
 };
 
